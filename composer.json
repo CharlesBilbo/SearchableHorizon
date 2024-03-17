@@ -1,0 +1,9 @@
+{
+    "require": {
+        "laravel/horizon": "^5.23"
+    },
+    "autoload": {
+        "psr-4": {
+            "SearchableHorizon\\": "/src"        }
+    }
+}
