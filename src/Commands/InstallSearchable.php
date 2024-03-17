@@ -61,9 +61,11 @@ class InstallSearchable extends \Illuminate\Console\Command
 
         $this->info('Copying Files into Horizon');
 
-        $command = 'cp ../Views/index.vue ' . base_path('/vendor/laravel/horizon/resources/js/screens/recentJobs/index.vue');
+        $viewCommand = 'cp ../Views/index.vue ' . base_path('/vendor/laravel/horizon/resources/js/screens/recentJobs/index.vue');
+        $routesCommand = 'cp ../routes/api.js ' . base_path('/vendor/laravel/horizon/routes/web.php');
 
-        Process::path(__DIR__)->run($command);
+        Process::path(__DIR__)->run($viewCommand);
+
 
         $this->info('Recompiling Mix');
 
