@@ -1,4 +1,5 @@
 <?php
+namespace SearchableHorizon\Commands;
 
 use Illuminate\Support\Facades\Process;
 
