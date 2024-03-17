@@ -1,6 +1,6 @@
 <?php
 
-namespace SearchabelHorizon\Http\Controllers;
+namespace SearchableHorizon\Http\Controllers;
 
 use Laravel\Horizon\Http\Controllers\CompletedJobsController as BaseController;
 use Illuminate\Http\Request;
