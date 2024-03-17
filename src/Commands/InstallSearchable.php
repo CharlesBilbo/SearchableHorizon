@@ -73,6 +73,6 @@ class InstallSearchable extends \Illuminate\Console\Command
 
         Process::path(base_path())->run('php artisan hoirzon:publish --force');
 
-        $this->info('SUCESS');
+        $this->info('SUCCESS');
     }
 }
