@@ -49,9 +49,21 @@ class RedisJobRepository extends BaseRedisRepository implements JobRepository
      */
     protected function getScopedJobsByQuery(string $type, int $afterIndex, string|null $query): Collection
     {
+        $afterIndex = $afterIndex === null ? -1 : $afterIndex;
         $status = Str::before($type, '_jobs');
         $command = $this->connection()
-            ->executeRaw(['FT.SEARCH', 'jobs_index', "$query AND @status:$status", 'RETURN', '1', '@id', 'NOCONTENT']);
+            ->executeRaw([
+                'FT.SEARCH',
+                'jobs_index',
+                "$query AND @status:$status",
+                'RETURN',
+                '1',
+                '@id',
+                'NOCONTENT',
+                'LIMIT',
+                $afterIndex,
+                $afterIndex + 50
+            ]);
 
         array_shift($command);
 
