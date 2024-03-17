@@ -2,6 +2,7 @@
 namespace SearchableHorizon\Commands;
 
 use Illuminate\Support\Facades\Process;
+use Mockery\Exception;
 
 class InstallSearchable extends \Illuminate\Console\Command
 {
@@ -11,6 +12,7 @@ class InstallSearchable extends \Illuminate\Console\Command
 
     public function handle()
     {
+
         $connection = \Illuminate\Support\Facades\Redis::connection('horizon');
 
         $modules = $connection->executeRaw(['MODULE', 'LIST']);
@@ -28,34 +30,49 @@ class InstallSearchable extends \Illuminate\Console\Command
 
         $this->info('Creating index for jobs in redis');
 
-        $connection->executeRaw([
-            'FT.CREATE',
-            'jobs_index',
-            'ON',
-            'HASH',
-            'PREFIX',
-            '1',
-            'laravel_horizon:',
-            'SCHEMA',
-            'payload',
-            'JSON',
-            'exception',
-            'TEXT',
-            'context',
-            'TEXT',
-            'queue',
-            'TEXT',
-            'name',
-            'TEXT'
-        ]);
+        try {
+            $connection->executeRaw([
+                'FT.CREATE',
+                'jobs_index',
+                'ON',
+                'HASH',
+                'PREFIX',
+                '1',
+                'laravel_horizon:',
+                'SCHEMA',
+                'payload',
+                'JSON',
+                'exception',
+                'TEXT',
+                'context',
+                'TEXT',
+                'queue',
+                'TEXT',
+                'name',
+                'TEXT'
+            ]);
+        } catch (\RedisException $exception) {
+            $this->error($exception->getMessage());
+        }
 
         $this->info('Installing NPM dependencies to recompile mix');
 
         Process::path(base_path() . '/vendor/laravel/horizon')->run('npm i');
 
+        $this->info('Copying Files into Horizon');
 
+        $command = 'cp ../Views/index.vue ' . base_path('/vendor/laravel/horizon/resources/js/screens/recentJobs/index.vue');
+
+        Process::path(__DIR__)->run($command);
+
+        $this->info('Recompiling Mix');
 
         Process::path(base_path() . '/vendor/laravel/horizon')->run('npm run development');
 
+        $this->info('Publishing compiled JS');
+
+        Process::path(base_path())->run('php artisan hoirzon:publish --force');
+
+        $this->info('SUCESS');
     }
 }
