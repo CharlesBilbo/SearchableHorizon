@@ -1,5 +1,7 @@
 {
     "name": "charlesbilbo/horizon-search",
+    "type": "library",
+    "license": "MIT",
     "require": {
         "laravel/horizon": "^5.23"
     },
