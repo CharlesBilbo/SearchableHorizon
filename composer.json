@@ -1,4 +1,5 @@
 {
+    "name": "charlesbilbo/horizon-search",
     "require": {
         "laravel/horizon": "^5.23"
     },

@@ -1,5 +1,5 @@
 <script type="text/ecmascript-6">
-import JobRow from '/../../vendor/laravel/horizon/resources/js/screens/recentJobs/job-row.vue';
+import JobRow from './job-row';
 
 export default {
   /**
