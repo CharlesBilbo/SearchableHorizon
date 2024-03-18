@@ -1,6 +1,6 @@
 <?php
 
-namespace SearchableHorizon\Http\Controller;
+namespace SearchableHorizon\Http\Controllers;
 
 use Laravel\Horizon\Http\Controllers\PendingJobsController as BaseController;
 use Illuminate\Http\Request;

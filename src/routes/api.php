@@ -34,7 +34,7 @@ Route::prefix('api')->group(function () {
     Route::post('/batches/retry/{id}', 'BatchesController@retry')->name('horizon.jobs-batches.retry');
 
     // Job Routes...
-    Route::get('/jobs/pending', [\SearchableHorizon\Http\Controller\PendingJobsController::class, 'index'])->name('horizon.pending-jobs.index');
+    Route::get('/jobs/pending', [\SearchableHorizon\Http\Controllers\PendingJobsController::class, 'index'])->name('horizon.pending-jobs.index');
     Route::get('/jobs/completed', [\SearchableHorizon\Http\Controllers\CompletedJobsController::class, 'index'])->name('horizon.completed-jobs.index');
     Route::get('/jobs/silenced', 'SilencedJobsController@index')->name('horizon.silenced-jobs.index');
     Route::get('/jobs/failed', 'FailedJobsController@index')->name('horizon.failed-jobs.index');
