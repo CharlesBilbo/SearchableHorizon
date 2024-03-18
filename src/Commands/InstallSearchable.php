@@ -12,7 +12,6 @@ class InstallSearchable extends \Illuminate\Console\Command
 
     public function handle()
     {
-
         $connection = \Illuminate\Support\Facades\Redis::connection('horizon');
 
         $modules = $connection->executeRaw(['MODULE', 'LIST']);
@@ -55,26 +54,22 @@ class InstallSearchable extends \Illuminate\Console\Command
             $this->error($exception->getMessage());
         }
 
-        $this->info('Installing NPM dependencies to recompile mix');
+        $files = [
+            __DIR__ . '/../Views/index.vue' => base_path('/vendor/laravel/horizon/resources/js/screens/recentJobs/index.vue'),
+            __DIR__ . '/../routes/api.php' => base_path('/vendor/laravel/horizon/routes/web.php')
+        ];
 
-        Process::path(base_path() . '/vendor/laravel/horizon')->run('npm i');
+        foreach ($files as $from => $to) {
+            copy($from, $to);
+        }
 
-        $this->info('Copying Files into Horizon');
+        $commands = [
+            'cd ' . base_path() . '/vendor/laravel/horizon && npm && npm run development',
+            'cd ' . base_path() . ' && php artisan hoirzon:publish --force'
+        ];
 
-        $viewCommand = 'cp ../Views/index.vue ' . base_path('/vendor/laravel/horizon/resources/js/screens/recentJobs/index.vue');
-        $routesCommand = 'cp ../routes/api.js ' . base_path('/vendor/laravel/horizon/routes/web.php');
-
-        Process::path(__DIR__)->run($viewCommand);
-
-
-        $this->info('Recompiling Mix');
-
-        Process::path(base_path() . '/vendor/laravel/horizon')->run('npm run development');
-
-        $this->info('Publishing compiled JS');
-
-        Process::path(base_path())->run('php artisan hoirzon:publish --force');
-
-        $this->info('SUCCESS');
+        foreach ($commands as $command) {
+            shell_exec($command);
+        }
     }
 }

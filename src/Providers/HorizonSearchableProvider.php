@@ -6,7 +6,6 @@ class HorizonSearchableProvider extends \Illuminate\Support\ServiceProvider
 {
     public function register()
     {
-        dd(true);
         $this->app->singleton(
             \SearchableHorizon\Contracts\JobRepository::class,
             \SearchableHorizon\Repositories\RedisJobRepository::class
