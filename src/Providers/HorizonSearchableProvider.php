@@ -2,6 +2,8 @@
 
 namespace SearchableHorizon\Providers;
 
+use SearchableHorizon\Commands\InstallSearchable;
+
 class HorizonSearchableProvider extends \Illuminate\Support\ServiceProvider
 {
     public function register()
